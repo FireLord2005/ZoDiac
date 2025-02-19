@@ -25,6 +25,7 @@ from main.wmpatch import GTWatermark, GTWatermarkMulti
 from main.utils import *
 from loss.loss import LossProvider
 from loss.pytorch_ssim import ssim
+import pandas as pd
 
 # Adding argparse
 parser = argparse.ArgumentParser()
@@ -511,12 +512,10 @@ for imagename in os.listdir(input_folder_path):
     #     perturbed_image_pil.save(os.path.join(wm_path, 'perturbed_images', f"{imagename}_perturbed.png"))
     #     det_prob = 1 - watermark_prob(os.path.join(wm_path, 'perturbed_images', f"{imagename}_perturbed.png"), pipe, wm_pipe, text_embeddings)
     #     metrics["adv"].append(det_prob)
-    tatta += 1  
+    tatta += 1 
+    metrics_df = pd.DataFrame(metrics)
+    metrics_df.to_csv(os.path.join(wm_path, 'metrics.csv'))
     logging.info(f'Image {imagename} done')
     logging.info(f'Image number {tatta+1}')
-#save this metrics to a csv file by coverting it to a dataframe
-logging.info(f'===== Saving Metrics =====')
-import pandas as pd
-df = pd.DataFrame(metrics)
-df.to_csv(os.path.join(wm_path, 'metrics.csv'))
+
 logging.info(f'===== Done =====')

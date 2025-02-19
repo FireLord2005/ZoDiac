@@ -17,6 +17,7 @@ from main.wmpatch import GTWatermark, GTWatermarkMulti
 from main.utils import *
 from loss.loss import LossProvider
 from loss.pytorch_ssim import ssim
+import pandas as pd
 
 logger = logging.getLogger()
 handler = logging.StreamHandler()
@@ -210,12 +211,10 @@ for imagename in os.listdir(input_folder_path):
         #     metrics[ssim_threshold]["adv"].append(det_prob)
 
     tatta += 1  
+    for threshold in ssim_thresholds:
+        df = pd.DataFrame(metrics[threshold])
+        df.to_csv(os.path.join(wm_path, f'metrics_SSIM{threshold:.2f}.csv'))
     logging.info(f'Image {imagename} done')
     logging.info(f'Image number {tatta}')
 
-logging.info(f'===== Saving Metrics =====')
-import pandas as pd
-for threshold in ssim_thresholds:
-    df = pd.DataFrame(metrics[threshold])
-    df.to_csv(os.path.join(wm_path, f'metrics_SSIM{threshold:.2f}.csv'))
 logging.info(f'===== Done =====')
