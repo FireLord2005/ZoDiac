@@ -201,14 +201,9 @@ for imagename in os.listdir(input_folder_path):
                 logging.info(f'Attacked images under {attacker_name} not exist.')
                 continue
                 
-            det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
+            #det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
+            det_prob = 1 # just checking code, remoce later
             metrics[ssim_threshold][attacker_name].append(det_prob)
-
-        # if args.attack:
-        #     # Adversarial attack code here (omitted for brevity)
-        #     # ...
-        #     det_prob = 1 - watermark_prob(os.path.join(wm_path, 'perturbed_images', f"{imagename}_perturbed.png"), pipe, wm_pipe, text_embeddings)
-        #     metrics[ssim_threshold]["adv"].append(det_prob)
 
     tatta += 1  
     for threshold in ssim_thresholds:

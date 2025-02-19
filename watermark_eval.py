@@ -51,7 +51,7 @@ wm_path = cfgs['save_img']
 # A dictionary to maintain running average of all the metrics
 
 if not args.adv_only:
-    metrics = {"ssim": [], "psnr": [], "normal": [], "adv": [] ,'diff_attacker_60':[],'cheng2020-anchor_3':[], 'bmshj2018-factorized_3':[], 'jpeg_attacker_50':[],'jpeg_attacker_90':[],'jpeg_attacker_99':[], 
+    metrics = {"ssim": [], "psnr": [], "normal": [] ,'diff_attacker_60':[],'cheng2020-anchor_3':[], 'bmshj2018-factorized_3':[], 'jpeg_attacker_50':[],'jpeg_attacker_90':[],'jpeg_attacker_99':[], 
                 'brightness_0.2':[],'brightness_0.4':[],'brightness_0.5':[],'brightness_0.6':[],'brightness_0.8':[],'brightness_1.25':[],'brightness_1.5':[] ,
                 'contrast_0.2':[],'contrast_0.4':[],'contrast_0.6':[],'contrast_0.5':[],'contrast_0.8':[],'contrast_1.25':[],'contrast_1.5':[],'vibrancy_1.25':[],'black_white':[],'lateral_inversion':[], 'Gaussian_noise':[], 'Gaussian_blur':[],'AnisotropicDiffusion_blur':[],
                 'DirectionalGaussian_blur':[],'sharpening':[],'salt_pepper_noise':[],'hue_change_0.1':[],'hue_change_0.3':[],
@@ -59,7 +59,7 @@ if not args.adv_only:
                 'log_transform':[],'color_jitter':[],'color_quantization':[],'sepia':[],'posterization':[],'rotate_30':[],'rotate_60':[],'rotate_90':[],'rotate_120':[],'rotate_150':[],'rotate_180':[],'rotate_210':[],'rotate_240':[],
                 'rotate_270':[],'lateral_rotate':[], 'bm3d':[],'all':[], 'all_norot':[]} #CHANGE
 else:
-    metrics = {"ssim": [], "psnr": [], "normal": [], "adv": []}
+    metrics = {"ssim": [], "psnr": [], "normal": []}
 
 
 tatta = 0
@@ -422,7 +422,8 @@ for imagename in os.listdir(input_folder_path):
     tester_prompt = '' # assume at the detection time, the original prompt is unknown
     text_embeddings = pipe.get_text_embedding(tester_prompt)
 
-    det_prob = 1 - watermark_prob(post_img, pipe, wm_pipe, text_embeddings)
+    # det_prob = 1 - watermark_prob(post_img, pipe, wm_pipe, text_embeddings)
+    det_prob = 1 # just checking code 
     metrics["normal"].append(det_prob)
     
     for attacker_name in attackers:
@@ -430,7 +431,8 @@ for imagename in os.listdir(input_folder_path):
             logging.info(f'Attacked images under {attacker_name} not exist.')
             continue
             
-        det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
+        #det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
+        det_prob  = 1
         #CHANGE , APPEND IN METRICS HERE
         metrics[attacker_name].append(det_prob)
     device = torch.device("cuda")
