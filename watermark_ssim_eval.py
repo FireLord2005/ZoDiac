@@ -189,6 +189,8 @@ for imagename in os.listdir(input_folder_path):
                     attackers[attacker_name].attack([post_img], [att_img_path], multi=True)
                 else:
                     attackers[attacker_name].attack([att_img_path], [att_img_path], multi=True)
+            det_prob = 1 - watermark_prob(att_img_path, pipe, wm_pipe, text_embeddings)
+            metrics[ssim_threshold][multi_name].append(det_prob)
 
         tester_prompt = ''
         text_embeddings = pipe.get_text_embedding(tester_prompt)
@@ -201,8 +203,7 @@ for imagename in os.listdir(input_folder_path):
                 logging.info(f'Attacked images under {attacker_name} not exist.')
                 continue
                 
-            #det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
-            det_prob = 1 # just checking code, remoce later
+            det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
             metrics[ssim_threshold][attacker_name].append(det_prob)
 
     tatta += 1  
