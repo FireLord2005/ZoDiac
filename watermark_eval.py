@@ -422,8 +422,7 @@ for imagename in os.listdir(input_folder_path):
     tester_prompt = '' # assume at the detection time, the original prompt is unknown
     text_embeddings = pipe.get_text_embedding(tester_prompt)
 
-    # det_prob = 1 - watermark_prob(post_img, pipe, wm_pipe, text_embeddings)
-    det_prob = 1 # just checking code 
+    det_prob = 1 - watermark_prob(post_img, pipe, wm_pipe, text_embeddings) 
     metrics["normal"].append(det_prob)
     
     for attacker_name in attackers:
@@ -431,8 +430,8 @@ for imagename in os.listdir(input_folder_path):
             logging.info(f'Attacked images under {attacker_name} not exist.')
             continue
             
-        #det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
-        det_prob  = 1
+        det_prob = 1 - watermark_prob(os.path.join(wm_path, attacker_name, os.path.basename(post_img)), pipe, wm_pipe, text_embeddings)
+
         #CHANGE , APPEND IN METRICS HERE
         metrics[attacker_name].append(det_prob)
     device = torch.device("cuda")
